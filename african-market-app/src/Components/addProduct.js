@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import WithAuth from "./axiosWithAuth";
 
 import { withRouter, useHistory } from "react-router-dom";
 
@@ -6,12 +7,31 @@ function AddProduct() {
   const [addProducts, setaddProducts] = useState(initialState);
   const onchange = e => {
     setaddProducts({ ...addProducts, [e.target.name]: e.target.value });
-    debugger;
   };
-  const onSubmit = () => {};
+  const onSubmit = e => {
+    e.preventDefault();
+    console.log(addProducts);
+    const id = localStorage.getItem("userId");
+    debugger;
+
+    WithAuth()
+      .post(
+        `https://african-marketplace-2020.herokuapp.com/api/users/${id}/listings`,
+        addProducts
+      )
+      .then(res => {
+        debugger;
+        console.log(res);
+        setaddProducts(initialState);
+      })
+      .catch(e => console.log(e))
+      .finally(() => {
+        console.log("Axios request finished.");
+      });
+  };
   return (
     <div>
-      <form onSubmit={onsubmit}>
+      <form onSubmit={onSubmit}>
         <label htmlFor='productForm_name'>Item :</label>
         <input
           type='text'

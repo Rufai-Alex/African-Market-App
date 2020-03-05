@@ -20,6 +20,7 @@ function LoginForm() {
         const token = response.data.token;
         debugger;
         localStorage.setItem("token", token);
+        localStorage.setItem("userId", response.data.user_id);
         debugger;
 
         console.log(response.data);
