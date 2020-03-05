@@ -1,27 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import WithAuth from "./axiosWithAuth";
 
-import { withRouter, useHistory } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { userContext } from "../context/userContext";
 
-function AddProduct() {
+function AddProduct(props) {
   const [addProducts, setaddProducts] = useState(initialState);
+  const { IdUser } = useContext(userContext);
+  debugger;
   const onchange = e => {
     setaddProducts({ ...addProducts, [e.target.name]: e.target.value });
   };
   const onSubmit = e => {
     e.preventDefault();
     console.log(addProducts);
-    const id = localStorage.getItem("userId");
+    // const id = localStorage.getItem("userId");
     debugger;
 
     WithAuth()
       .post(
-        `https://african-marketplace-2020.herokuapp.com/api/users/${id}/listings`,
+        `https://african-marketplace-2020.herokuapp.com/api/users/${IdUser}/listings`,
         addProducts
       )
       .then(res => {
         debugger;
         console.log(res);
+        props.history.push("/products");
         setaddProducts(initialState);
       })
       .catch(e => console.log(e))

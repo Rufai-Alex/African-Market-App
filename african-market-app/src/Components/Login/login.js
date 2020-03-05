@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import * as Yup from "yup";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import { userContext } from "../../context/userContext";
+import AddProduct from "../addProduct";
 
-function LoginForm() {
-  //   const history = useHistory();
+function LoginForm(props) {
+  const history = props.history;
+  const [IdUser, setIdUser] = useState(null);
+
   function handleSubmit(values, actions) {
     console.log(values);
     axios
@@ -20,11 +24,12 @@ function LoginForm() {
         const token = response.data.token;
         debugger;
         localStorage.setItem("token", token);
-        localStorage.setItem("userId", response.data.user_id);
+        setIdUser(response.data.user_id);
+
         debugger;
 
         console.log(response.data);
-        // history.push("/Products");
+        history.push("/Products");
         actions.resetForm();
       })
       .catch(error => console.log(error.response.data))
@@ -32,7 +37,8 @@ function LoginForm() {
         console.log("done");
       });
   }
-
+  const obj = { IdUser };
+  debugger;
   return (
     <div className='LoginForm'>
       <h1>Africa MarketPlace LoginForm</h1>
@@ -65,6 +71,9 @@ function LoginForm() {
           </p> */}
         </Form>
       </Formik>
+      <userContext.Provider value={obj}>
+        <AddProduct />
+      </userContext.Provider>
     </div>
   );
 }
