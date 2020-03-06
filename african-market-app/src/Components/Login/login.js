@@ -4,12 +4,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
-import { userContext } from "../../context/userContext";
 import AddProduct from "../addProduct";
 
 function LoginForm(props) {
   const history = props.history;
-  const [IdUser, setIdUser] = useState(null);
 
   function handleSubmit(values, actions) {
     console.log(values);
@@ -18,26 +16,25 @@ function LoginForm(props) {
         ...values,
         profile_pic_url: ""
       })
-
       .then(response => {
         debugger;
         const token = response.data.token;
         debugger;
         localStorage.setItem("token", token);
-        setIdUser(response.data.user_id);
+        localStorage.setItem("userId", response.data.user_id);
 
         debugger;
 
         console.log(response.data);
-        history.push("/Products");
         actions.resetForm();
+        history.push("/Products");
       })
       .catch(error => console.log(error.response.data))
       .finally(() => {
         console.log("done");
       });
   }
-  const obj = { IdUser };
+
   debugger;
   return (
     <div className='LoginForm'>
@@ -71,9 +68,9 @@ function LoginForm(props) {
           </p> */}
         </Form>
       </Formik>
-      <userContext.Provider value={obj}>
+      {/* <userContext.Provider value={obj}>
         <AddProduct />
-      </userContext.Provider>
+      </userContext.Provider> */}
     </div>
   );
 }

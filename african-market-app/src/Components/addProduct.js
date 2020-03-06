@@ -6,7 +6,6 @@ import { userContext } from "../context/userContext";
 
 function AddProduct(props) {
   const [addProducts, setaddProducts] = useState(initialState);
-  const { IdUser } = useContext(userContext);
   debugger;
   const onchange = e => {
     setaddProducts({ ...addProducts, [e.target.name]: e.target.value });
@@ -14,12 +13,12 @@ function AddProduct(props) {
   const onSubmit = e => {
     e.preventDefault();
     console.log(addProducts);
-    // const id = localStorage.getItem("userId");
+    const id = localStorage.getItem("userId");
     debugger;
 
     WithAuth()
       .post(
-        `https://african-marketplace-2020.herokuapp.com/api/users/${IdUser}/listings`,
+        `https://african-marketplace-2020.herokuapp.com/api/users/${id}/listings`,
         addProducts
       )
       .then(res => {

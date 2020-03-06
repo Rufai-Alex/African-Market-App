@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import WithAuth from "./axiosWithAuth";
-
+import Product from "./product";
+import { userContext } from "../context/userContext";
 export default function Products() {
   const [products, setproducts] = useState([]);
   const [itemsUpdate, setitemsUpdate] = useState({
@@ -56,77 +57,25 @@ export default function Products() {
   const onchange = e => {
     setitemsUpdate({ ...itemsUpdate, [e.target.name]: e.target.value });
   };
+
+  const obj = {
+    products: products,
+    updateItem: updateItem,
+    deleteItem: deleteItem,
+    currentId: currentId,
+    onSubmit: onSubmit,
+    itemsUpdate: itemsUpdate,
+    onchange: onchange,
+    oncancel: oncancel
+  };
+  if (products.length == 0) {
+    return <h1>loading</h1>;
+  }
   return (
     <div>
-      {products.map(product => {
-        return (
-          <div key={product.id}>
-            <h1>{product.item}</h1>
-            <img className='card-img' alt='cardImage' />
-            <p className='pill'>Price : ₦ {product.price}</p>
-            <p className='place'>Location :{product.location}</p>
-            <p className='group'>Description :{product.description}</p>
-            <div>
-              <button onClick={() => updateItem(product)}>Update</button>
-            </div>
-            <div>
-              {" "}
-              <button onClick={() => deleteItem(product)}>Delete</button>
-            </div>
-            {currentId ? (
-              <div>
-                <form onSubmit={onSubmit}>
-                  <label htmlFor='productForm_name'>Item :</label>
-                  <input
-                    type='text'
-                    id='productForm_name'
-                    name='item'
-                    placeholder='Enter product name'
-                    onChange={onchange}
-                    value={itemsUpdate.item}
-                  />
-                  <br />
-                  <label htmlFor='productForm__description'>
-                    Description :{" "}
-                  </label>
-                  <input
-                    type='text'
-                    id='productForm_description'
-                    name='description'
-                    placeholder='Enter product description'
-                    onChange={onchange}
-                    value={itemsUpdate.description}
-                  />{" "}
-                  <br />
-                  <label htmlFor='productForm__price'>Price : </label>
-                  <input
-                    type='text'
-                    id='productForm_price'
-                    name='price'
-                    placeholder='Enter product price'
-                    onChange={onchange}
-                    value={itemsUpdate.price}
-                  />{" "}
-                  <br />
-                  <label htmlFor='productForm__location'>Location : </label>
-                  <input
-                    type='text'
-                    id='productForm__location'
-                    name='location'
-                    placeholder='Enter product location'
-                    onChange={onchange}
-                    value={itemsUpdate.location}
-                  />
-                  <input type='submit' />
-                  <button onClick={oncancel}>Cancel </button>
-                </form>
-              </div>
-            ) : (
-              <div></div>
-            )}{" "}
-          </div>
-        );
-      })}
+      <userContext.Provider value={obj}>
+        <Product />
+      </userContext.Provider>
     </div>
   );
 }
